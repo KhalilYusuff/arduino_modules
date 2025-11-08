@@ -26,11 +26,9 @@ public:
 
 	MFRC522::Uid* getUIDData();
 
-	void read(); 
-
 	bool isAllowed();
 
 	String getName();
 
-}
+};
 
