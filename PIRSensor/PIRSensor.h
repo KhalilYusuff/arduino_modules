@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-class PIRDetector {
+class PIRSensor {
 private:
     int detectionPin; // Digital pinne koblet til PIR OUT
     String name;
@@ -10,11 +10,13 @@ private:
     unsigned long lastMotion = 0; 
 
 public:
-    PIRDetector(String name, int pin);
+    PIRSensor(String name, int pin);
     void begin();
 
     //Sjekker bevegelse og oppdaterer lastMotion.
     bool checkAndLogMotion(); 
+
+    bool checkMotion();
 
     //Returnerer tid i millisekunder siden siste bevegelse.
     unsigned long timeSinceLastMotion(); 
