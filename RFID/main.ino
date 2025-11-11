@@ -6,19 +6,21 @@ const byte ALLOWED_UIDS[][7] = {
     // UID 1: 4 bytes (pad med 0x00)
     {0xA1, 0xB2, 0xC3, 0xD4, 0x00, 0x00, 0x00}, 
     // UID 2: 7 bytes
-    {0x04, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC}  
+    {0x04, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC},
+    {0x7A, 0x2C, 0x0F, 0xB0, 0x00, 0x00, 0x00} 
 };
 
 // 2. Definerer lengden for hver tilsvarende UID
-const byte ALLOWED_LENS[] = {4, 7};
+const byte ALLOWED_LENS[] = {4, 7, 4};
 
 // 3. Definerer antall elementer
-const int ALLOWED_COUNT = 2; 
+const int ALLOWED_COUNT = 3; 
 
 // Konverterer 2D-arrayet til en peker-array for å sende det til klassen
 const byte* UID_POINTERS[ALLOWED_COUNT] = {
     ALLOWED_UIDS[0],
-    ALLOWED_UIDS[1]
+    ALLOWED_UIDS[1], 
+    ALLOWED_UIDS[2],
 };
 // ------------------------------------------
 
@@ -58,5 +60,6 @@ void loop() {
         } else {
             Serial.println(" -> TILGANG NEKTET.");
         }
+        
     }
 }

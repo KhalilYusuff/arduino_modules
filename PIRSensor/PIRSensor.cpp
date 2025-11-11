@@ -1,7 +1,7 @@
-#include "PIRDetector.h"
+#include "PIRSensor.h"
 
 // Konstruktør
-PIRDetector::PIRDetector(String nName, int pin) 
+PIRSensor::PIRSensor(String nName, int pin) 
     : name(nName), detectionPin(pin) 
 {
     // Konstruktøren lagrer pinnen og navnet
@@ -12,7 +12,7 @@ PIRDetector::PIRDetector(String nName, int pin)
  * Bruker standard INPUT. (Mange PIR-moduler har internt kretsløp som hindrer floating.)
  * Alternativt kan INPUT_PULLUP brukes hvis man opplever støy.
  */
-void PIRDetector::begin() {
+void PIRSensor::begin() {
     pinMode(detectionPin, INPUT);
     
     // Hvis du opplever støy, kan du bruke:
@@ -21,7 +21,7 @@ void PIRDetector::begin() {
     Serial.print(name);
     Serial.println(" PIR-detektor initialisert.");
 }
-bool PIRDetector::checkAndLogMotion() {
+bool PIRSensor::checkAndLogMotion() {
     int pirState = digitalRead(detectionPin);
     
     if (pirState == HIGH) {
@@ -31,18 +31,26 @@ bool PIRDetector::checkAndLogMotion() {
     }
     return false;
 }
+bool PIRSensor::checkMotion(){
+    int state = digitalRead(detectionPin);
+
+    if (state == HIGH){
+        return true;
+    }
+    return false;
+}
 
 /**
  * Kalkulerer hvor mange millisekunder det har gått siden siste bevegelse.
  * Viser hvor lenge en "tidtaker" har vært aktiv/inaktiv.
  */
-unsigned long PIRDetector::timeSinceLastMotion() {
+unsigned long PIRSensor::timeSinceLastMotion() {
     // Dette håndterer "rollover" (at millis() går tilbake til 0) korrekt.
     // Nåtid (millis()) minus lagret tid (lastMotion).
     return millis() - this->lastMotion;
 }
 
 // Returnerer sensorens navn
-String PIRDetector::getName() {
+String PIRSensor::getName() {
     return name;
 }

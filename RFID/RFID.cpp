@@ -1,8 +1,25 @@
 #include "RFID.h"
 
 
+RFID::RFID(int ssPin, int rstPin, String nName, 
+           const byte** uids, const byte* lens, int count)
+    : name(nName), allowedUIDs(uids), allowedLens(lens), allowedCount(count) 
+{
+    rfid1 = new MFRC522(ssPin, rstPin);
+}
+
 bool RFID::isNewCardPresent(){
 	return (rfid1->PICC_IsNewCardPresent() && rfid1->PICC_ReadCardSerial());
+}
+
+void RFID::begin() {
+    SPI.begin();       // Starter SPI kommunikasjon
+    rfid1->PCD_Init(); // Starter MFRC522-modulen
+    Serial.println(F("RFID-leser initialisert."));
+}
+
+RFID::~RFID() {
+    delete rfid1;
 }
 
 void RFID::printUID(){
@@ -37,7 +54,7 @@ bool RFID::isAllowed(){
 		if (len != this->allowedLens[i]){
 			continue;
 		}
-		bool match = true; 
+		bool match = true;
 
 		for (byte j = 0; j < len; j++){
 			if (uid[j] != this->allowedUIDs[i][j]){ 

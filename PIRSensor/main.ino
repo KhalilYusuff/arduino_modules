@@ -1,10 +1,10 @@
-#include "PIRDetector.h"
+#include "PIRSensor.h"
 
 #define PIR_OUT_PIN 2   // Definer pinnen PIR OUT er koblet til
 #define LED_PIN 13      // Antatt LED-pinne for demonstrasjon
 #define TIMEOUT_MS 10000 // 10 sekunder timeout
 
-PIRDetector bevegelseSensor("Gang-Vakt", PIR_OUT_PIN);
+PIRSensor bevegelseSensor("Gang-Vakt", PIR_OUT_PIN);
 
 void setup() {
     Serial.begin(9600);
