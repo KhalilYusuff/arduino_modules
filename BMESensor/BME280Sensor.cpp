@@ -37,9 +37,9 @@ BMEData BME280Sensor::readData() {
     // - Fuktighet i %
     // - Trykk i Pascal (Pa), så vi deler med 100 for hPa
     
-    data.temperature = bme.readTemperature();
-    data.humidity = bme.readHumidity();
-    data.pressure = bme.readPressure() / 100.0F; // Konverterer Pa til hPa
+    data.temperature = bme.readTempC();
+    data.humidity = bme.readFloatHumidity();
+    data.pressure = bme.readFloatPressure() / 100.0F; // Konverterer Pa til hPa
 
     return data;
 }

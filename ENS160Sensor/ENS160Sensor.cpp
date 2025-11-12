@@ -1,32 +1,43 @@
 #include "ENS160Sensor.h"
 
-// Standard I2C-adresse for ENS160 er 0x53
+
 
 // Konstruktør
-ENS160Sensor::ENS160Sensor(String nName) 
-    : name(nName) 
+ENS160Sensor::ENS160Sensor(String nName, int cs, int anInt) 
+    : name(nName), csPin(cs), intPin(anInt) //Sender csPin til airSensor
 {
-    // airSensor-objektet initialiseres automatisk her
+    // Konstruktøren lagrer bare pinnene og navnet
 }
 
 /**
  * Starter I2C-kommunikasjon og ENS160-sensoren.
  */
 bool ENS160Sensor::begin() {
-    Serial.println("Starter ENS160 Luftkvalitetssensor...");
+    Serial.println("Starter ENS160 Luftkvalitetssensor (SPI)...");
     
-    // Standard Wire.begin() for I2C
-    Wire.begin(); 
+    // 1. Initialiser SPI
+    SPI.begin(); 
     
-    // airSensor.begin() returnerer true ved suksess
-    if (!airSensor.begin()) {
-        Serial.println("FEIL: Finner ikke ENS160 sensoren! Sjekk tilkobling/adresse.");
+    //Sett CS-pinnen som OUTPUT og HIGH (Inaktiv tilstand)
+    pinMode(csPin, OUTPUT); 
+    digitalWrite(csPin, HIGH); // Sett CS høy for å deaktivere sensoren
+    pinMode(intPin, INPUT); 
+
+    
+    // 2. Initialiser sensor.
+    if (!airSensor.begin(csPin)) { 
+        Serial.println("FEIL: Finner ikke ENS160 via SPI! Sjekk tilkobling/CS-pinne.");
         return false;
     }
     
-    Serial.println("ENS160 initialisert.");
-    
-    // Siden sensoren trenger ca. 3 minutter for stabil avlesning
+    //
+    airSensor.setOperatingMode(SFE_ENS160_RESET); 
+    delay(100); // Venter etter Reset
+
+    // 2. Sett Run-modus (0x02)
+    airSensor.setOperatingMode(SFE_ENS160_STANDARD);
+
+    Serial.println("ENS160 initialisert OK.");
     Serial.println("Merk: ENS160 trenger 3 minutter for stabil avlesning.");
     
     return true;
@@ -38,8 +49,8 @@ bool ENS160Sensor::begin() {
  */
 void ENS160Sensor::setCompensations(float tempC, float humidityRH) {
     // ENS160 bruker disse verdiene for å beregne nøyaktigere TVOC og eCO2
-    airSensor.setTempCompensation(tempC);
-    airSensor.setHumidityCompensation(humidityRH);
+    airSensor.setTempCompensationCelsius(tempC);
+    airSensor.setRHCompensationFloat(humidityRH);
 }
 
 /**
@@ -48,13 +59,18 @@ void ENS160Sensor::setCompensations(float tempC, float humidityRH) {
 AirQualityData ENS160Sensor::readData() {
     AirQualityData data;
     
+    data.aqi = 0;
+    data.tvoc = 0;
+    data.eco2 = 0;
+
     // Les de nyeste verdiene
-    airSensor.measure(); 
-    
-    // Fyll strukturen med målingene
-    data.aqi = airSensor.getAQI();
-    data.tvoc = airSensor.getTVOC();
-    data.eco2 = airSensor.geteCO2();
+
+    if (airSensor.checkDataStatus()){
+        data.aqi = airSensor.getAQI();
+        data.tvoc = airSensor.getTVOC();
+        data.eco2 = airSensor.getECO2();
+        return data;    
+    }
     
     return data;
 }

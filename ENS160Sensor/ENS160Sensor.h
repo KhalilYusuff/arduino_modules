@@ -16,12 +16,15 @@ struct AirQualityData {
 class ENS160Sensor {
 private:
     // Det private ENS160-objektet
-    ENS160 airSensor; 
+    SparkFun_ENS160_SPI airSensor; 
     String name;
+    int csPin; 
+    int intPin;
+    
     
 public:
-    // Konstruktør: Tar kun et navn (I2C-adresse er som regel fast)
-    ENS160Sensor(String name);
+    // Konstruktør
+    ENS160Sensor(String name, int csPin, int intPin);
 
     // Initialiserer sensoren. Returnerer true ved suksess.
     bool begin();
