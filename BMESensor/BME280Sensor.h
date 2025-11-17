@@ -1,8 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <Wire.h>
-#include <Adafruit_BME280.h> // Må inkluderes for BME280 funksjonalitet
-
+#include <SparkFunBME280.h>
 // Struktur for å holde alle målinger samlet
 struct BMEData {
     float temperature; // Temperatur i Celsius
@@ -12,8 +11,8 @@ struct BMEData {
 
 class BME280Sensor {
 private:
-    // Det private Adafruit BME280-objektet
-    Adafruit_BME280 bme; 
+    // Det private BME280-objektet
+    BME280 bme; 
     String name;
     
 public:

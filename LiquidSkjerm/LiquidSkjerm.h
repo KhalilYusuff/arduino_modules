@@ -4,7 +4,7 @@
 
 class LiquidSkjerm {
 private:
-    LiquidCrystal *lcd; 
+    LiquidCrystal lcd; 
     int numColm;
     int numRows;
     String name;
@@ -17,8 +17,12 @@ public:
     // Initialiserer skjermen (kaller lcd.begin)
     void begin(); 
 
-    // Lag en enkel metode for å skrive tekst
-    void write(const char* text, int col, int row);
+    // Skriver tekst til en spesifikk kolonne og rad
+    template <typename T>
+    void write(T value, int col, int row){
+        lcd.setCursor(col, row);
+        lcd.print(value);
+    }
     
     void clear();
 

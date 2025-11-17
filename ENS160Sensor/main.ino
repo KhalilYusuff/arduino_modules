@@ -1,13 +1,16 @@
 #include "ENS160Sensor.h"
-#include "BME280Sensor.h" //Brukes for temperatur/fuktighet(https://github.com/KhalilYusuff/arduino_modules/tree/main/BMESensor)
+#include "BME280Sensor.h" 
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <Wire.h>
 
 // Deklarer objekter
 BME280Sensor klimaSensor("Klimasjekk");
-ENS160Sensor luftSensor("Luftkvalitet");
+ENS160Sensor luftSensor("Luftkvalitet", 10, 0);
 
 void setup() {
     Serial.begin(9600);
-    
+
     if (!klimaSensor.begin() || !luftSensor.begin()) {
         while(1); // Stopp ved feil
     }
@@ -17,6 +20,7 @@ void setup() {
 
 void loop() {
     // 1. Les data fra BME280 (trengs for kompensasjon)
+
     BMEData klimaData = klimaSensor.readData();
 
     // 2. Sett kompensasjonsverdier i ENS160
@@ -44,5 +48,5 @@ void loop() {
     
     Serial.println("================================");
 
-    delay(5000); 
+    delay(10000); 
 }
