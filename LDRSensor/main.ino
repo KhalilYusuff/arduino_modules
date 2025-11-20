@@ -6,8 +6,8 @@
 
 // Egendefinerte kalibreringspunkter
 // VIKTIG: Sett disse basert på dine egne målinger i mørke/lys
-#define MY_DARK_RAW 850
-#define MY_BRIGHT_RAW 150
+#define MY_DARK_RAW 150
+#define MY_BRIGHT_RAW 850
 
 LDRSensor lysSensor("Ute-Lys", LDR_PIN);
 
@@ -25,7 +25,7 @@ void loop() {
     
     // Filtrert verdi i % (0=mørkt, 100=lyst)
     int lightPercentage = lysSensor.getLightPercentage();
-    
+        
     Serial.print("Lysnivå: ");
     Serial.print(lightPercentage);
     Serial.print("% | ");

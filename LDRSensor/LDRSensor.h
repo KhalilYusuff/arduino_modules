@@ -7,8 +7,8 @@ private:
     String name;
     
     // Kalibrering: Disse bør settes i begin() eller via en metode
-    int darkValue = 800;  // Råverdi for "helt mørkt"
-    int brightValue = 100; // Råverdi for "helt lyst"
+    int darkValue = 150;  // Råverdi for "helt mørkt"
+    int brightValue = 850; // Råverdi for "helt lyst"
     
     // Konstanter for Moving Average (filtrering)
     static const int WINDOW_SIZE = 10; 
