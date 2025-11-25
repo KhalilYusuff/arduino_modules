@@ -55,10 +55,8 @@ int LDRSensor::getLightPercentage() {
     // Bruk den filtrerte verdien for stabil %-visning
     int filteredValue = readFilteredValue();
     
-    // NÅ: Mapp fra [lyst, mørkt] til [100, 0] for å få intuitiv %
-    // Hvis 150 (lyst) skal være 100% og 850 (mørkt) skal være 0%
-    int lightPercent = map(filteredValue, brightValue, darkValue, 0, 100);
-
+    // [darkValue (Lav), brightValue (Høy)] til [0% (mørkt), 100% (lyst)]
+    int lightPercent = map(filteredValue, darkValue, brightValue, 0, 100);
     // Sikrer at verdien holder seg innenfor [0, 100]
     return constrain(lightPercent, 0, 100);
 }
